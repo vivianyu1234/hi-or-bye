@@ -20,30 +20,30 @@ export default function Finger() {
   const { fingerHeight, fingerRadius } = DIMENSIONS;
   const { finger: pos } = POSITIONS;
 
-  // Realistic skin material with subsurface scattering effect
+  // Mustard yellow material
   const skinMaterial = useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color('#e8b89a'),
+      color: new THREE.Color('#d4a545'),
       roughness: 0.5,
       metalness: 0.0,
       clearcoat: 0.1,
       clearcoatRoughness: 0.8,
       sheen: 0.3,
       sheenRoughness: 0.5,
-      sheenColor: new THREE.Color('#ffb090'),
+      sheenColor: new THREE.Color('#e8b855'),
     });
   }, []);
 
   const skinMaterialDark = useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color('#d9a085'),
+      color: new THREE.Color('#c49535'),
       roughness: 0.55,
       metalness: 0.0,
       clearcoat: 0.1,
       clearcoatRoughness: 0.8,
       sheen: 0.3,
       sheenRoughness: 0.5,
-      sheenColor: new THREE.Color('#e89878'),
+      sheenColor: new THREE.Color('#d4a545'),
     });
   }, []);
 
@@ -103,13 +103,13 @@ export default function Finger() {
       {/* Joint crease 1 - subtle indentation */}
       <mesh position={[0, fingerHeight * 0.24, 0]} rotation={[Math.PI / 2, 0, 0]}>
         <torusGeometry args={[fingerRadius * 0.96, 0.008, 16, 64]} />
-        <meshStandardMaterial color="#c89878" transparent opacity={0.7} />
+        <meshStandardMaterial color="#b08030" transparent opacity={0.7} />
       </mesh>
 
       {/* Joint crease 2 */}
       <mesh position={[0, fingerHeight * 0.50, 0]} rotation={[Math.PI / 2, 0, 0]}>
         <torusGeometry args={[fingerRadius * 0.90, 0.008, 16, 64]} />
-        <meshStandardMaterial color="#c89878" transparent opacity={0.7} />
+        <meshStandardMaterial color="#b08030" transparent opacity={0.7} />
       </mesh>
 
       {/* Knuckle bump at first joint */}
@@ -124,10 +124,10 @@ export default function Finger() {
         <primitive object={skinMaterial} attach="material" />
       </mesh>
 
-      {/* Severed base with flesh tone */}
+      {/* Severed base */}
       <mesh position={[0, 0.005, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <circleGeometry args={[fingerRadius, 64]} />
-        <meshStandardMaterial color="#9a5050" roughness={0.9} />
+        <meshStandardMaterial color="#a08030" roughness={0.9} />
       </mesh>
     </group>
   );

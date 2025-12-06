@@ -18,16 +18,16 @@ export const ROOMS: Room[] = [
     id: 1,
     name: 'The Forbidden Room',
     chemicals: [
-      { id: 'pill-blue', name: 'Blue Pill', color: '#4a90d9', isLethal: false },
-      { id: 'pill-red', name: 'Red Pill', color: '#d94a4a', isLethal: true },
+      { id: 'vape', name: 'Mystery Vape', color: '#4a90d9', isLethal: false },
+      { id: 'air-freshener', name: 'Air Freshener', color: '#d94a4a', isLethal: true },
     ],
   },
   {
     id: 2,
     name: 'The Floating Chamber',
     chemicals: [
-      { id: 'vial-green', name: 'Green Vial', color: '#4ad94a', isLethal: true },
-      { id: 'vial-purple', name: 'Purple Vial', color: '#9a4ad9', isLethal: false },
+      { id: 'sleeping-pills', name: 'Sleeping Pills', color: '#4ad94a', isLethal: true },
+      { id: 'lynx-deodorant', name: 'Lynx Deodorant', color: '#9a4ad9', isLethal: false },
     ],
   },
   {

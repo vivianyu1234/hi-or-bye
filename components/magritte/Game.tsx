@@ -8,6 +8,9 @@ import Room from './Room';
 import Finger from './Finger';
 import StripedBall from './StripedBall';
 import Staircase from './Staircase';
+import Bed from './Bed';
+import Wardrobe from './Wardrobe';
+import HairComb from './HairComb';
 import Lighting from './Lighting';
 import ChemicalChoice from './ChemicalChoice';
 import { ROOMS, Chemical, GameState } from '@/lib/magritte/gameState';
@@ -72,10 +75,25 @@ export default function Game() {
           />
 
           <Lighting />
-          <Room />
-          <Finger />
-          <StripedBall />
-          <Staircase />
+          <Room roomId={room.id} />
+          
+          {/* Room 1 objects */}
+          {room.id === 1 && (
+            <>
+              <Finger />
+              <StripedBall />
+              <Staircase />
+            </>
+          )}
+          
+          {/* Room 2 objects */}
+          {room.id === 2 && (
+            <>
+              <Bed />
+              <Wardrobe />
+              <HairComb />
+            </>
+          )}
 
           {/* Chemical choices */}
           {gameState === 'playing' && !transitioning && (
@@ -101,7 +119,7 @@ export default function Game() {
           <h1 className="text-4xl font-bold tracking-widest mb-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
             HI OR BYE
           </h1>
-          <p className="text-lg opacity-80">Room {currentRoom + 1}: {room.name}</p>
+          <p className="text-lg opacity-80">Select a substance to take</p>
         </div>
       </div>
 

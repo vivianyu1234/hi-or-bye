@@ -1,15 +1,21 @@
 export const COLORS = {
-  wall: '#c4a5a0',
-  wallDark: '#a88f8a',
-  floor: '#8b7355',
-  floorDark: '#5c4a3a',
-  skin: '#e8c4a0',
-  skinDark: '#c9a080',
+  wall: '#6b7a65',
+  wallDark: '#5a6955',
+  floor: '#f0dede',
+  floorDark: '#d4c0c0',
+  skin: '#d4a545',
+  skinDark: '#c49535',
   ballWhite: '#f5f5f5',
   ballBlack: '#1a1a1a',
   textWhite: '#ffffff',
   wood: '#4a3a2a',
   woodDark: '#3a2a1a',
+  skyBlue: '#87CEEB',
+  skyBlueLight: '#B0E0E6',
+  cloudWhite: '#FFFFFF',
+  rugDark: '#3a2a2a',
+  rugPattern: '#2a1a1a',
+  ceiling: '#F5F5DC',
 };
 
 export const DIMENSIONS = {
