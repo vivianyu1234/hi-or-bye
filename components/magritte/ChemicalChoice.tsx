@@ -114,16 +114,16 @@ function SleepingPillsShape({ color, hovered }: { color: string; hovered: boolea
 function DeodorantShape({ color, hovered }: { color: string; hovered: boolean }) {
   return (
     <group>
-      {/* Can body */}
+      {/* Can body - uses the color prop */}
       <mesh castShadow>
         <cylinderGeometry args={[0.25, 0.25, 1.0, 32]} />
         <meshPhysicalMaterial
-          color="#1a1a1a"
-          roughness={0.2}
-          metalness={0.6}
+          color={color}
+          roughness={0.3}
+          metalness={0.4}
           clearcoat={0.5}
           emissive={color}
-          emissiveIntensity={hovered ? 0.15 : 0.05}
+          emissiveIntensity={hovered ? 0.2 : 0.05}
         />
       </mesh>
       {/* Cap */}
@@ -139,8 +139,86 @@ function DeodorantShape({ color, hovered }: { color: string; hovered: boolean })
       {/* Brand label stripe */}
       <mesh position={[0, -0.1, 0.251]} rotation={[0, 0, 0]}>
         <planeGeometry args={[0.4, 0.3]} />
+        <meshStandardMaterial color="#FFFFFF" roughness={0.5} />
+      </mesh>
+    </group>
+  );
+}
+
+function BleachBottleShape({ color, hovered }: { color: string; hovered: boolean }) {
+  return (
+    <group>
+      {/* Bottle body - white/translucent */}
+      <mesh castShadow>
+        <cylinderGeometry args={[0.2, 0.2, 1.0, 32]} />
+        <meshPhysicalMaterial
+          color="#FFFFFF"
+          roughness={0.2}
+          metalness={0.0}
+          clearcoat={0.8}
+          clearcoatRoughness={0.2}
+          transparent
+          opacity={0.9}
+          emissive={color}
+          emissiveIntensity={hovered ? 0.1 : 0.02}
+        />
+      </mesh>
+      {/* Cap - yellow/orange warning color */}
+      <mesh position={[0, 0.55, 0]} castShadow>
+        <cylinderGeometry args={[0.22, 0.22, 0.15, 32]} />
+        <meshStandardMaterial color="#FFA500" roughness={0.3} metalness={0.2} />
+      </mesh>
+      {/* Handle */}
+      <mesh position={[0.25, 0.1, 0]} rotation={[0, 0, -Math.PI / 6]} castShadow>
+        <torusGeometry args={[0.08, 0.02, 16, 32, Math.PI]} />
+        <meshStandardMaterial color="#FFFFFF" roughness={0.3} />
+      </mesh>
+      {/* Warning label stripe */}
+      <mesh position={[0, 0, 0.201]} rotation={[0, 0, 0]}>
+        <planeGeometry args={[0.3, 0.4]} />
+        <meshStandardMaterial color="#FFD700" roughness={0.5} />
+      </mesh>
+    </group>
+  );
+}
+
+function WindowCleanerShape({ color, hovered }: { color: string; hovered: boolean }) {
+  return (
+    <group>
+      {/* Spray bottle body */}
+      <mesh castShadow>
+        <cylinderGeometry args={[0.22, 0.22, 0.9, 32]} />
+        <meshPhysicalMaterial
+          color="#E0F0FF"
+          roughness={0.3}
+          metalness={0.1}
+          clearcoat={0.5}
+          emissive={color}
+          emissiveIntensity={hovered ? 0.15 : 0.05}
+        />
+      </mesh>
+      {/* Trigger/pump top */}
+      <mesh position={[0, 0.5, 0]} castShadow>
+        <boxGeometry args={[0.15, 0.2, 0.12]} />
+        <meshStandardMaterial color="#4a90d9" roughness={0.4} metalness={0.2} />
+      </mesh>
+      {/* Spray nozzle */}
+      <mesh position={[0, 0.65, 0]} castShadow>
+        <cylinderGeometry args={[0.03, 0.05, 0.1, 16]} />
+        <meshStandardMaterial color="#888888" roughness={0.2} metalness={0.6} />
+      </mesh>
+      {/* Label */}
+      <mesh position={[0, -0.1, 0.221]} rotation={[0, 0, 0]}>
+        <planeGeometry args={[0.35, 0.5]} />
         <meshStandardMaterial color={color} roughness={0.5} />
       </mesh>
+      {/* Handle/grip indentations */}
+      {Array.from({ length: 3 }, (_, i) => (
+        <mesh key={i} position={[0.23, -0.3 + i * 0.2, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
+          <torusGeometry args={[0.1, 0.015, 8, 16, Math.PI]} />
+          <meshStandardMaterial color="#C0C0C0" roughness={0.5} />
+        </mesh>
+      ))}
     </group>
   );
 }
@@ -184,6 +262,10 @@ export default function ChemicalChoice({ chemical, position, onSelect }: Chemica
         return <SleepingPillsShape color={chemical.color} hovered={hovered} />;
       case 'lynx-deodorant':
         return <DeodorantShape color={chemical.color} hovered={hovered} />;
+      case 'bleach':
+        return <BleachBottleShape color={chemical.color} hovered={hovered} />;
+      case 'window-cleaner':
+        return <WindowCleanerShape color={chemical.color} hovered={hovered} />;
       default:
         return <DefaultShape color={chemical.color} hovered={hovered} />;
     }

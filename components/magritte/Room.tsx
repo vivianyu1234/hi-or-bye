@@ -10,6 +10,7 @@ interface RoomProps {
 export default function Room({ roomId = 1 }: RoomProps) {
   const { roomWidth, roomHeight, roomDepth } = DIMENSIONS;
   const isBedroom = roomId === 2;
+  const isBathroom = roomId === 3;
 
   // Create sky texture with clouds for bedroom
   const createSkyTexture = () => {
@@ -72,48 +73,84 @@ export default function Room({ roomId = 1 }: RoomProps) {
       {/* Ceiling */}
       <mesh position={[0, roomHeight, 0]} rotation={[Math.PI / 2, 0, 0]} receiveShadow>
         <planeGeometry args={[roomWidth, roomDepth]} />
-        <meshStandardMaterial color={isBedroom ? COLORS.ceiling : COLORS.wallDark} />
+        <meshStandardMaterial color={isBedroom ? COLORS.ceiling : isBathroom ? '#C4956A' : COLORS.wallDark} />
       </mesh>
+
+      {/* Wood ceiling planks for bathroom */}
+      {isBathroom && Array.from({ length: 25 }, (_, i) => (
+        <mesh
+          key={`ceiling-plank-${i}`}
+          position={[-roomWidth / 2 + (i + 0.5) * (roomWidth / 25), roomHeight - 0.001, 0]}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <planeGeometry args={[0.02, roomDepth]} />
+          <meshBasicMaterial color="#A67B52" />
+        </mesh>
+      ))}
 
       {/* Back Wall */}
-      <mesh position={[0, roomHeight / 2, -roomDepth / 2]} receiveShadow>
-        <planeGeometry args={[roomWidth, roomHeight]} />
-        <meshStandardMaterial 
-          color={isBedroom ? COLORS.skyBlue : COLORS.wall}
-          map={skyTexture || undefined}
-        />
-      </mesh>
+      {isBathroom ? (
+        <>
+          {/* Upper wood paneling */}
+          <mesh position={[0, roomHeight * 0.7, -roomDepth / 2]} receiveShadow>
+            <planeGeometry args={[roomWidth, roomHeight * 0.6]} />
+            <meshStandardMaterial color="#C4956A" roughness={0.6} />
+          </mesh>
+          {/* Lower tile section */}
+          <mesh position={[0, roomHeight * 0.2, -roomDepth / 2 + 0.01]} receiveShadow>
+            <planeGeometry args={[roomWidth, roomHeight * 0.4]} />
+            <meshStandardMaterial color="#E8E0D5" roughness={0.4} />
+          </mesh>
+        </>
+      ) : (
+        <mesh position={[0, roomHeight / 2, -roomDepth / 2]} receiveShadow>
+          <planeGeometry args={[roomWidth, roomHeight]} />
+          <meshStandardMaterial color={isBedroom ? COLORS.skyBlue : COLORS.wall} />
+        </mesh>
+      )}
 
       {/* Left Wall */}
-      <mesh
-        position={[-roomWidth / 2, roomHeight / 2, 0]}
-        rotation={[0, Math.PI / 2, 0]}
-        receiveShadow
-      >
-        <planeGeometry args={[roomDepth, roomHeight]} />
-        <meshStandardMaterial 
-          color={isBedroom ? COLORS.skyBlue : COLORS.wall}
-          map={skyTexture || undefined}
-        />
-      </mesh>
+      {isBathroom ? (
+        <>
+          <mesh position={[-roomWidth / 2, roomHeight * 0.7, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow>
+            <planeGeometry args={[roomDepth, roomHeight * 0.6]} />
+            <meshStandardMaterial color="#C4956A" roughness={0.6} />
+          </mesh>
+          <mesh position={[-roomWidth / 2 + 0.01, roomHeight * 0.2, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow>
+            <planeGeometry args={[roomDepth, roomHeight * 0.4]} />
+            <meshStandardMaterial color="#E8E0D5" roughness={0.4} />
+          </mesh>
+        </>
+      ) : (
+        <mesh position={[-roomWidth / 2, roomHeight / 2, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow>
+          <planeGeometry args={[roomDepth, roomHeight]} />
+          <meshStandardMaterial color={isBedroom ? COLORS.skyBlue : COLORS.wall} />
+        </mesh>
+      )}
 
       {/* Right Wall */}
-      <mesh
-        position={[roomWidth / 2, roomHeight / 2, 0]}
-        rotation={[0, -Math.PI / 2, 0]}
-        receiveShadow
-      >
-        <planeGeometry args={[roomDepth, roomHeight]} />
-        <meshStandardMaterial 
-          color={isBedroom ? COLORS.skyBlue : COLORS.wall}
-          map={skyTexture || undefined}
-        />
-      </mesh>
+      {isBathroom ? (
+        <>
+          <mesh position={[roomWidth / 2, roomHeight * 0.7, 0]} rotation={[0, -Math.PI / 2, 0]} receiveShadow>
+            <planeGeometry args={[roomDepth, roomHeight * 0.6]} />
+            <meshStandardMaterial color="#C4956A" roughness={0.6} />
+          </mesh>
+          <mesh position={[roomWidth / 2 - 0.01, roomHeight * 0.2, 0]} rotation={[0, -Math.PI / 2, 0]} receiveShadow>
+            <planeGeometry args={[roomDepth, roomHeight * 0.4]} />
+            <meshStandardMaterial color="#E8E0D5" roughness={0.4} />
+          </mesh>
+        </>
+      ) : (
+        <mesh position={[roomWidth / 2, roomHeight / 2, 0]} rotation={[0, -Math.PI / 2, 0]} receiveShadow>
+          <planeGeometry args={[roomDepth, roomHeight]} />
+          <meshStandardMaterial color={isBedroom ? COLORS.skyBlue : COLORS.wall} />
+        </mesh>
+      )}
 
-      {/* Floor - wood or rug based on room */}
+      {/* Floor - wood, rug, or tile based on room */}
       {isBedroom ? (
         <>
-          {/* Wooden floor base */}
+          {/* Cream/beige wooden floor base */}
           <mesh
             rotation={[-Math.PI / 2, 0, 0]}
             position={[0, 0, 0]}
@@ -121,11 +158,11 @@ export default function Room({ roomId = 1 }: RoomProps) {
           >
             <planeGeometry args={[roomWidth, roomDepth, 1, 1]} />
             <meshStandardMaterial
-              color={COLORS.wood}
-              roughness={0.8}
+              color={COLORS.room2Floor}
+              roughness={0.7}
             />
           </mesh>
-          
+
           {/* Wood plank lines */}
           {Array.from({ length: 20 }, (_, i) => (
             <mesh
@@ -134,42 +171,60 @@ export default function Room({ roomId = 1 }: RoomProps) {
               rotation={[-Math.PI / 2, 0, 0]}
             >
               <planeGeometry args={[0.02, roomDepth]} />
-              <meshBasicMaterial color={COLORS.woodDark} />
+              <meshBasicMaterial color={COLORS.room2FloorDark} />
             </mesh>
           ))}
-          
-          {/* Dark patterned rug in center */}
+
+          {/* Green and white striped rug */}
+          {Array.from({ length: 12 }, (_, i) => (
+            <mesh
+              key={`rug-stripe-${i}`}
+              rotation={[-Math.PI / 2, 0, 0]}
+              position={[0, 0.01, -roomDepth * 0.25 + i * (roomDepth * 0.5 / 12)]}
+              receiveShadow
+            >
+              <planeGeometry args={[roomWidth * 0.6, roomDepth * 0.5 / 12]} />
+              <meshStandardMaterial
+                color={i % 2 === 0 ? COLORS.rugDark : COLORS.rugPattern}
+                roughness={0.9}
+              />
+            </mesh>
+          ))}
+        </>
+      ) : isBathroom ? (
+        <>
+          {/* Bathroom tile floor - cream/beige */}
           <mesh
             rotation={[-Math.PI / 2, 0, 0]}
-            position={[0, 0.01, 0]}
+            position={[0, 0, 0]}
             receiveShadow
           >
-            <planeGeometry args={[roomWidth * 0.7, roomDepth * 0.6]} />
+            <planeGeometry args={[roomWidth, roomDepth, 1, 1]} />
             <meshStandardMaterial
-              color={COLORS.rugDark}
-              roughness={0.9}
+              color="#E8E0D5"
+              roughness={0.5}
             />
           </mesh>
-          
-          {/* Rug pattern lines */}
-          {Array.from({ length: 8 }, (_, i) => (
+
+          {/* Small tile grid lines */}
+          {Array.from({ length: 28 }, (_, i) => (
             <mesh
-              key={`rug-line-${i}`}
-              position={[-roomWidth * 0.35 + (i + 0.5) * (roomWidth * 0.7 / 8), 0.011, 0]}
+              key={`tile-line-h-${i}`}
+              position={[-roomWidth / 2 + (i + 0.5) * (roomWidth / 28), 0.001, 0]}
               rotation={[-Math.PI / 2, 0, 0]}
             >
-              <planeGeometry args={[0.02, roomDepth * 0.6]} />
-              <meshBasicMaterial color={COLORS.rugPattern} />
+              <planeGeometry args={[0.015, roomDepth]} />
+              <meshBasicMaterial color="#D8D0C5" />
             </mesh>
           ))}
-          {Array.from({ length: 6 }, (_, i) => (
+          {Array.from({ length: 32 }, (_, i) => (
             <mesh
-              key={`rug-line-v-${i}`}
-              position={[0, 0.011, -roomDepth * 0.3 + (i + 0.5) * (roomDepth * 0.6 / 6)]}
+              key={`tile-line-v-${i}`}
+              position={[0, 0.001, -roomDepth / 2 + (i + 0.5) * (roomDepth / 32)]}
               rotation={[-Math.PI / 2, 0, 0]}
             >
-              <planeGeometry args={[roomWidth * 0.7, 0.02]} />
-              <meshBasicMaterial color={COLORS.rugPattern} />
+              <planeGeometry args={[roomWidth, 0.015]} />
+              <meshBasicMaterial color="#D8D0C5" />
             </mesh>
           ))}
         </>

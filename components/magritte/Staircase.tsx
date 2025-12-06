@@ -31,7 +31,7 @@ export default function Staircase() {
         >
           <boxGeometry args={[staircaseWidth, stepHeight, stepDepth]} />
           <meshStandardMaterial
-            color={hoveredStep === i ? '#d4c0c0' : '#f0dede'}
+            color={hoveredStep === i ? '#d07a92' : '#e38fa7'}
             roughness={0.7}
           />
         </mesh>

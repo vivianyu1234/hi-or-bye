@@ -2,69 +2,88 @@
 
 import { useRef } from 'react';
 import * as THREE from 'three';
-import { COLORS } from '@/lib/magritte/constants';
 
 export default function Bed() {
   const groupRef = useRef<THREE.Group>(null);
 
-  // Bed positioned on the left side of the room
-  const bedWidth = 2.5;
-  const bedHeight = 0.4;
-  const bedDepth = 1.8;
-  const mattressHeight = 0.3;
-  const frameThickness = 0.1;
+  // Larger bed to match Magritte painting scale
+  const bedWidth = 4;
+  const bedLength = 5;
+  const frameHeight = 0.8;
+  const headboardHeight = 2.5;
+  const footboardHeight = 1.5;
+  const mattressHeight = 0.5;
+  const legHeight = 0.4;
+
+  const woodColor = '#4A3728'; // Dark wood frame
+  const woodColorDark = '#3A2A1A';
+  const beddingColor = '#2E8B7E'; // Teal green blanket
 
   return (
-    <group ref={groupRef} position={[-5, 0, 2]} castShadow receiveShadow>
-      {/* Bed frame - dark wood */}
-      {/* Headboard */}
-      <mesh position={[0, bedHeight / 2 + mattressHeight / 2, bedDepth / 2]} castShadow>
-        <boxGeometry args={[bedWidth, bedHeight, frameThickness]} />
-        <meshStandardMaterial color={COLORS.woodDark} roughness={0.6} />
+    <group ref={groupRef} position={[-4, 0, -6]} rotation={[0, Math.PI / 2, 0]}>
+      {/* Bed legs */}
+      {[[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([x, z], i) => (
+        <mesh key={`leg-${i}`} position={[x * (bedWidth / 2 - 0.15), legHeight / 2, z * (bedLength / 2 - 0.15)]} castShadow>
+          <boxGeometry args={[0.15, legHeight, 0.15]} />
+          <meshStandardMaterial color={woodColorDark} roughness={0.6} />
+        </mesh>
+      ))}
+
+      {/* Bed frame base */}
+      <mesh position={[0, legHeight + 0.1, 0]} castShadow receiveShadow>
+        <boxGeometry args={[bedWidth, 0.2, bedLength]} />
+        <meshStandardMaterial color={woodColor} roughness={0.7} />
+      </mesh>
+
+      {/* Headboard - tall curved top */}
+      <mesh position={[0, legHeight + headboardHeight / 2, bedLength / 2 - 0.1]} castShadow>
+        <boxGeometry args={[bedWidth, headboardHeight, 0.15]} />
+        <meshStandardMaterial color={woodColor} roughness={0.6} />
+      </mesh>
+
+      {/* Headboard decorative top curve */}
+      <mesh position={[0, legHeight + headboardHeight - 0.2, bedLength / 2 - 0.1]} castShadow>
+        <boxGeometry args={[bedWidth - 0.4, 0.4, 0.18]} />
+        <meshStandardMaterial color={woodColorDark} roughness={0.5} />
       </mesh>
 
       {/* Footboard */}
-      <mesh position={[0, bedHeight / 2 + mattressHeight / 2, -bedDepth / 2]} castShadow>
-        <boxGeometry args={[bedWidth, bedHeight, frameThickness]} />
-        <meshStandardMaterial color={COLORS.woodDark} roughness={0.6} />
+      <mesh position={[0, legHeight + footboardHeight / 2, -bedLength / 2 + 0.1]} castShadow>
+        <boxGeometry args={[bedWidth, footboardHeight, 0.12]} />
+        <meshStandardMaterial color={woodColor} roughness={0.6} />
       </mesh>
 
-      {/* Left side rail */}
-      <mesh position={[-bedWidth / 2, bedHeight / 2 + mattressHeight / 2, 0]} castShadow>
-        <boxGeometry args={[frameThickness, bedHeight, bedDepth]} />
-        <meshStandardMaterial color={COLORS.woodDark} roughness={0.6} />
+      {/* Side rails */}
+      <mesh position={[-bedWidth / 2 + 0.06, legHeight + 0.3, 0]} castShadow>
+        <boxGeometry args={[0.12, 0.25, bedLength - 0.3]} />
+        <meshStandardMaterial color={woodColor} roughness={0.6} />
+      </mesh>
+      <mesh position={[bedWidth / 2 - 0.06, legHeight + 0.3, 0]} castShadow>
+        <boxGeometry args={[0.12, 0.25, bedLength - 0.3]} />
+        <meshStandardMaterial color={woodColor} roughness={0.6} />
       </mesh>
 
-      {/* Right side rail */}
-      <mesh position={[bedWidth / 2, bedHeight / 2 + mattressHeight / 2, 0]} castShadow>
-        <boxGeometry args={[frameThickness, bedHeight, bedDepth]} />
-        <meshStandardMaterial color={COLORS.woodDark} roughness={0.6} />
+      {/* Red mattress/bedding */}
+      <mesh position={[0, legHeight + 0.2 + mattressHeight / 2, 0]} castShadow receiveShadow>
+        <boxGeometry args={[bedWidth - 0.3, mattressHeight, bedLength - 0.4]} />
+        <meshStandardMaterial color={beddingColor} roughness={0.85} />
       </mesh>
 
-      {/* Base/slat support */}
-      <mesh position={[0, bedHeight / 2, 0]} castShadow receiveShadow>
-        <boxGeometry args={[bedWidth - frameThickness * 2, frameThickness, bedDepth - frameThickness * 2]} />
-        <meshStandardMaterial color={COLORS.wood} roughness={0.7} />
+      {/* Coral/red patterned pillows */}
+      <mesh position={[-0.7, legHeight + 0.2 + mattressHeight + 0.15, bedLength / 2 - 0.8]} castShadow>
+        <boxGeometry args={[1.2, 0.25, 0.8]} />
+        <meshStandardMaterial color="#E85A4F" roughness={0.8} />
+      </mesh>
+      <mesh position={[0.7, legHeight + 0.2 + mattressHeight + 0.15, bedLength / 2 - 0.8]} castShadow>
+        <boxGeometry args={[1.2, 0.25, 0.8]} />
+        <meshStandardMaterial color="#E85A4F" roughness={0.8} />
       </mesh>
 
-      {/* Red mattress */}
-      <mesh position={[0, bedHeight + mattressHeight / 2, 0]} castShadow receiveShadow>
-        <boxGeometry args={[bedWidth - 0.1, mattressHeight, bedDepth - 0.1]} />
-        <meshStandardMaterial color="#8B0000" roughness={0.8} />
-      </mesh>
-
-      {/* White bedding/pillow */}
-      <mesh position={[0, bedHeight + mattressHeight + 0.15, bedDepth / 2 - 0.3]} castShadow>
-        <boxGeometry args={[bedWidth - 0.2, 0.2, 0.6]} />
-        <meshStandardMaterial color="#FFFFFF" roughness={0.7} />
-      </mesh>
-
-      {/* White sheet covering part of mattress */}
-      <mesh position={[0, bedHeight + mattressHeight + 0.05, -bedDepth / 4]} castShadow>
-        <boxGeometry args={[bedWidth - 0.15, 0.1, bedDepth * 0.5]} />
-        <meshStandardMaterial color="#F5F5F5" roughness={0.7} />
+      {/* White sheet folded over */}
+      <mesh position={[0, legHeight + 0.2 + mattressHeight + 0.08, bedLength / 2 - 1.8]} castShadow>
+        <boxGeometry args={[bedWidth - 0.5, 0.12, 1.5]} />
+        <meshStandardMaterial color="#F8F8F8" roughness={0.75} />
       </mesh>
     </group>
   );
 }
-
